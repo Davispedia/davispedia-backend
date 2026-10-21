@@ -1,6 +1,6 @@
 services:
   mediawiki:
-    image: ghcr.io/Davispedia/davispedia-backend:latest
+    image: ghcr.io/davispedia/davispedia-backend:latest
     restart: always
     depends_on:
       db:
