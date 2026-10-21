@@ -9,7 +9,7 @@ on:
       - frontend-main-updated
 
 env:
-  DEPLOY_IMAGE: ghcr.io/davis-wiki-revival/davispedia-backend:latest
+  DEPLOY_IMAGE: ghcr.io/davispedia/davispedia-backend:latest
   IMAGE_ARCHIVE: davispedia-backend.tar.gz
 
 jobs:
