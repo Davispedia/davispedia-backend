@@ -2,7 +2,7 @@ FROM node:20 AS frontend-builder
 
 ARG FRONTEND_REF=main
 
-RUN git clone https://github.com/Davis-Wiki-Revival/davispedia-frontend.git /frontend
+RUN git clone https://github.com/Davispedia/davispedia-frontend.git /frontend
 
 WORKDIR /frontend
 
@@ -12,6 +12,9 @@ RUN git checkout "${FRONTEND_REF}" \
 
 
 FROM mediawiki:1.46
+
+RUN apt-get update && apt-get upgrade -y \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=frontend-builder --chown=www-data:www-data \
     /frontend/extension.json \
