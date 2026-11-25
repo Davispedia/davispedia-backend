@@ -1,0 +1,10 @@
+Cow
+Aggie
+Sheep
+Egghead
+Ram
+Chicken
+Duck
+Goose
+Turkey
+Quail

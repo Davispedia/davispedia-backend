@@ -37,6 +37,10 @@ COPY --chown=www-data:www-data \
     extensions/PictureOfTheDay/ \
     /var/www/html/extensions/PictureOfTheDay/
 
+COPY --chown=www-data:www-data \
+    extensions/TempUserWords/ \
+    /var/www/html/extensions/TempUserWords/
+
 RUN git clone --depth 1 -b REL1_46 https://github.com/wikimedia/mediawiki-extensions-StopForumSpam.git /var/www/html/extensions/StopForumSpam \
     && chown -R www-data:www-data /var/www/html/extensions/StopForumSpam
 
@@ -60,6 +64,7 @@ RUN mkdir -p /var/www/html/sitemap \
 RUN test -f /var/www/html/extensions/DavispediaFrontend/extension.json \
     && test -f /var/www/html/extensions/Cowlender/extension.json \
     && test -f /var/www/html/extensions/PictureOfTheDay/extension.json \
+    && test -f /var/www/html/extensions/TempUserWords/extension.json \
     && test -f /var/www/html/extensions/AbuseFilter/extension.json \
     && test -f /var/www/html/extensions/StopForumSpam/extension.json \
     && test -f /var/www/html/extensions/ConfirmEdit/extension.json \

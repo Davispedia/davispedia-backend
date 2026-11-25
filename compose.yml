@@ -15,3 +15,5 @@ services:
       - ./extensions/Cowlender:/var/www/html/extensions/Cowlender:ro
       # Mount the backend-owned POTD extension
       - ./extensions/PictureOfTheDay:/var/www/html/extensions/PictureOfTheDay:ro
+      # Mount the backend-owned TempUserWords extension
+      - ./extensions/TempUserWords:/var/www/html/extensions/TempUserWords:ro
