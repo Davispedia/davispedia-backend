@@ -1,0 +1,28 @@
+{
+  "name": "TempUserWords",
+  "version": "0.1.0",
+  "author": [
+    "Joshua Lawson"
+  ],
+  "url": "https://davispedia.org/",
+  "descriptionmsg": "tempuserwords-desc",
+  "license-name": "MIT",
+  "type": "other",
+  "requires": {
+    "MediaWiki": ">= 1.44"
+  },
+  "AutoloadClasses": {
+    "MediaWiki\\Extension\\TempUserWords\\WordListSerialMapping": "includes/WordListSerialMapping.php"
+  },
+  "MessagesDirs": {
+    "TempUserWords": [
+      "i18n"
+    ]
+  },
+  "TempUserSerialMappings": {
+    "word-list": {
+      "class": "MediaWiki\\Extension\\TempUserWords\\WordListSerialMapping"
+    }
+  },
+  "manifest_version": 2
+}

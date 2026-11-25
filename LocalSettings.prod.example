@@ -1,0 +1,252 @@
+<?php
+# Production LocalSettings.php template for Davispedia (MediaWiki 1.46).
+# Copy this file to LocalSettings.php on the production server and replace
+# all CHANGE_ME placeholders with real secrets. Never commit real secrets.
+#
+# See includes/MainConfigSchema.php for all configurable settings
+# and their default values, or:
+# https://www.mediawiki.org/wiki/Manual:Configuration_settings
+
+# Protect against web entry
+if ( !defined( 'MEDIAWIKI' ) ) {
+	exit;
+}
+
+## Uncomment this to disable output compression
+# $wgDisableOutputCompression = true;
+
+$wgSitename = "davispedia";
+$wgMetaNamespace = "Davispedia";
+
+## The URL base path to the directory containing the wiki;
+## defaults for all runtime URL paths are based off of this.
+## For more information on customizing the URLs
+## (like /w/index.php/Page_title to /wiki/Page_title) please see:
+## https://www.mediawiki.org/wiki/Manual:Short_URL
+$wgScriptPath = "";
+
+## The protocol and server name to use in fully-qualified URLs
+$wgServer = "http://davispedia.org";
+
+## The URL path to static resources (images, scripts, etc.)
+$wgResourceBasePath = $wgScriptPath;
+
+## The URL paths to the logo. Make sure you change this from the default,
+## or else you'll overwrite your logo when you upgrade!
+$wgLogos = [
+	'1x' => "$wgResourceBasePath/images/chu-icon.png",
+	'icon' => "$wgResourceBasePath/images/chu-icon.png",
+];
+
+$wgFavicon = "$wgResourceBasePath/images/favicon-2.ico";
+
+## Footer customization
+$wgHooks['SkinAddFooterLinks'][] = static function (
+	Skin $skin,
+	string $key,
+	array &$footerLinks
+): void {
+	if ( $key !== 'places' ) {
+		return;
+	}
+
+	$disclaimer = $footerLinks['disclaimer'] ?? null;
+	unset( $footerLinks['disclaimer'] );
+
+	$footerLinks['dmca'] = \MediaWiki\Html\Html::element(
+		'a',
+		[
+			'href' => \MediaWiki\Title\Title::newFromText(
+				'Davispedia:DMCA'
+			)->getFullURL(),
+		],
+		'DMCA'
+	);
+
+	if ( $disclaimer !== null ) {
+		$footerLinks['disclaimer'] = $disclaimer;
+	}
+};
+
+## UPO means: this is also a user preference option
+$wgEnableEmail = true;
+$wgEnableUserEmail = true; # UPO
+
+$wgEmergencyContact = "info@davispedia.org";
+$wgPasswordSender = "info@davispedia.org";
+
+$wgEnotifUserTalk = false; # UPO
+$wgEnotifWatchlist = false; # UPO
+$wgEmailAuthentication = true;
+
+## Database settings (MariaDB container in compose.prod.yml)
+$wgDBtype = "REDACTED";
+$wgDBserver = "REDACTED";
+$wgDBname = "REDACTED";
+$wgDBuser = "REDACTED";
+$wgDBpassword = "CHANGE_ME_DB_PASSWORD";
+
+# MySQL specific settings
+$wgDBprefix = "";
+$wgDBssl = false;
+
+# MySQL table options to use during installation or update
+$wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
+
+# Shared database table
+# This has no effect unless $wgSharedDB is also set.
+$wgSharedTables[] = "actor";
+
+## Shared memory / object cache settings
+# CACHE_ACCEL uses APCu inside Apache (fast for single-node web requests).
+# Note: Use CACHE_DB instead if you want the CLI StopForumSpam cron job
+# (updateDenyList.php) to pre-warm a cache shared with Apache workers.
+$wgMainCacheType = CACHE_ACCEL;
+$wgMemCachedServers = [];
+
+## To enable image uploads, make sure the 'images' directory
+## is writable, then set this to true:
+$wgEnableUploads = true;
+$wgUseImageMagick = true;
+$wgImageMagickConvertCommand = "/usr/bin/convert";
+
+# InstantCommons allows wiki to use images from https://commons.wikimedia.org
+$wgUseInstantCommons = false;
+
+# Periodically send a pingback to https://www.mediawiki.org/ with basic data
+# about this MediaWiki instance.
+$wgPingback = false;
+
+# Site language code, should be one of the list in ./includes/Languages/Data/Names.php
+$wgLanguageCode = "en";
+
+# Time zone
+$wgLocaltimezone = "UTC";
+
+## Set $wgCacheDirectory to a writable directory on the web server
+## to make your wiki go slightly faster. The directory should not
+## be publicly accessible from the web.
+#$wgCacheDirectory = "$IP/cache";
+
+$wgSecretKey = "CHANGE_ME_64_HEX_SECRET_KEY";
+
+# Changing this will log out all existing sessions.
+$wgAuthenticationTokenVersion = "1";
+
+# Site upgrade key. Must be set to a string to turn on the
+# web installer while LocalSettings.php is in place.
+$wgUpgradeKey = "CHANGE_ME_UPGRADE_KEY";
+
+## Licensing metadata
+$wgRightsPage = "Davispedia:Copyrights";
+$wgRightsUrl = "https://creativecommons.org/licenses/by/4.0/deed.en";
+$wgRightsText = "Creative Commons Attribution 4.0 International License";
+$wgRightsIcon = "$wgResourceBasePath/resources/assets/licenses/cc-by.png";
+
+# Path to the GNU diff3 utility. Used for conflict resolution.
+$wgDiff3 = "/usr/bin/diff3";
+
+## Default skin
+$wgDefaultSkin = "vector";
+$wgDefaultMobileSkin = 'vector';
+
+# Enabled skins
+wfLoadSkin( 'MinervaNeue' );
+wfLoadSkin( 'MonoBook' );
+wfLoadSkin( 'Timeless' );
+wfLoadSkin( 'Vector' );
+
+# Custom Extensions
+wfLoadExtension( 'DavispediaFrontend' );
+wfLoadExtension( 'Cowlender' );
+wfLoadExtension( 'PictureOfTheDay' );
+
+# Site Access Permissions
+$wgGroupPermissions['*']['read'] = true;
+$wgGroupPermissions['*']['createaccount'] = false;
+
+# Disable editing for anonymous users and standard registered users
+$wgGroupPermissions['*']['edit'] = false;
+$wgGroupPermissions['user']['edit'] = false;
+
+# Ensure administrators (sysop) retain the edit right
+$wgGroupPermissions['sysop']['edit'] = true;
+
+#################################################
+############# NON DEFAULT #######################
+#################################################
+
+$wgSMTP = [
+	'host'     => 'witcher.mxrouting.net',
+	'IDHost'   => 'davispedia.org',
+	'port'     => 2525,
+	'auth'     => true,
+	'username' => 'REDACTED',
+	'password' => 'REDACTED',
+];
+
+wfLoadExtension( 'VisualEditor' );
+
+// 2026-11-07 changes for SEO
+$wgDefaultRobotPolicy = 'index,follow';
+$wgArticlePath = "/wiki/$1";
+$wgUsePathInfo = true;
+
+// Discord webhook notifications
+if ( is_dir( "$IP/extensions/Discord" ) ) {
+	wfLoadExtension( 'Discord' );
+	$wgDiscordWebhookURL = [
+		'REDACTED',
+	];
+}
+
+// Anti-spam extensions
+wfLoadExtension( 'AbuseFilter' );
+
+if ( is_dir( "$IP/extensions/StopForumSpam" ) ) {
+	wfLoadExtension( 'StopForumSpam' );
+	$wgSFSIPListLocation = 'https://www.stopforumspam.com/downloads/listed_ip_30_ipv46_all.gz';
+	$wgSFSValidateIPListLocationMD5 = 'https://www.stopforumspam.com/downloads/listed_ip_30_ipv46_all.gz.md5';
+	$wgSFSIPThreshold = 5;
+	$wgSFSReportOnly = false;
+}
+
+wfLoadExtensions( [ 'ConfirmEdit', 'ConfirmEdit/QuestyCaptcha' ] );
+$wgCaptchaClass = 'QuestyCaptcha';
+
+// Add your questions in LocalSettings.php using this format:
+$wgCaptchaQuestions = [
+	'What city is this wiki based on?' => 'Davis',
+	'What is the capital of California?' => 'Sacramento',
+	'What is the name of this wiki?' => $wgSitename, // You can use variables
+];
+
+$wgCaptchaTriggers['edit']          = true;
+$wgCaptchaTriggers['create']        = true;
+$wgCaptchaTriggers['addurl']        = true;
+$wgCaptchaTriggers['createaccount'] = true;
+$wgCaptchaTriggers['badlogin']      = true;
+$wgGroupPermissions['autoconfirmed']['skipcaptcha'] = true;
+
+// Temporary user accounts
+// https://www.mediawiki.org/wiki/Manual:$wgAutoCreateTempUser
+wfLoadExtension( 'TempUserWords' );
+$wgAutoCreateTempUser = [
+	'known' => true,
+	'enabled' => true,
+	'actions' => [
+		'edit',
+	],
+	'genPattern' => '~$1',
+	'matchPattern' => null,
+	'reservedPattern' => '~$1',
+	'serialProvider' => [
+		'type' => 'local',
+		'useYear' => true,
+	],
+	'serialMapping' => [
+		'type' => 'word-list',
+	],
+	'expireAfterDays' => 90,
+	'notifyBeforeExpirationDays' => 10,
+];
