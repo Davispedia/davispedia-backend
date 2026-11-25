@@ -227,3 +227,26 @@ $wgCaptchaTriggers['addurl']        = true;
 $wgCaptchaTriggers['createaccount'] = true;
 $wgCaptchaTriggers['badlogin']      = true;
 $wgGroupPermissions['autoconfirmed']['skipcaptcha'] = true;
+
+// Temporary user accounts
+// https://www.mediawiki.org/wiki/Manual:$wgAutoCreateTempUser
+wfLoadExtension( 'TempUserWords' );
+$wgAutoCreateTempUser = [
+	'known' => true,
+	'enabled' => true,
+	'actions' => [
+		'edit',
+	],
+	'genPattern' => '~$1',
+	'matchPattern' => null,
+	'reservedPattern' => '~$1',
+	'serialProvider' => [
+		'type' => 'local',
+		'useYear' => true,
+	],
+	'serialMapping' => [
+		'type' => 'word-list',
+	],
+	'expireAfterDays' => 90,
+	'notifyBeforeExpirationDays' => 10,
+];
