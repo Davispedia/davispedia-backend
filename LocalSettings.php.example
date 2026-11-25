@@ -30,6 +30,11 @@ if ( is_dir( "$IP/extensions/Cowlender" ) ) {
 
 wfLoadExtension( 'PictureOfTheDay' );
 
+if ( is_dir( "$IP/extensions/Discord" ) ) {
+    wfLoadExtension( 'Discord' );
+    $wgDiscordWebhookURL = [ '' ];
+}
+
 # Object cache (required for StopForumSpam IP deny-list caching across CLI/web)
 $wgMainCacheType = CACHE_DB;
 

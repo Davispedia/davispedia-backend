@@ -37,6 +37,9 @@ COPY --chown=www-data:www-data \
     extensions/PictureOfTheDay/ \
     /var/www/html/extensions/PictureOfTheDay/
 
+RUN git clone --depth 1 -b REL1_45 https://github.com/jaydenkieran/mw-discord.git /var/www/html/extensions/Discord \
+    && chown -R www-data:www-data /var/www/html/extensions/Discord
+
 COPY --chown=www-data:www-data \
     extensions/TempUserWords/ \
     /var/www/html/extensions/TempUserWords/
@@ -64,6 +67,7 @@ RUN mkdir -p /var/www/html/sitemap \
 RUN test -f /var/www/html/extensions/DavispediaFrontend/extension.json \
     && test -f /var/www/html/extensions/Cowlender/extension.json \
     && test -f /var/www/html/extensions/PictureOfTheDay/extension.json \
+    && test -f /var/www/html/extensions/Discord/extension.json \
     && test -f /var/www/html/extensions/TempUserWords/extension.json \
     && test -f /var/www/html/extensions/AbuseFilter/extension.json \
     && test -f /var/www/html/extensions/StopForumSpam/extension.json \
