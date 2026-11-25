@@ -88,8 +88,6 @@ Cows near the [[Animal Sciences Teaching Facility]].
 </davispedia-picture-of-the-day-queue>
 ```
 
-
-
 ## Production build help
 
 The frontend revision is an explicit build argument:
